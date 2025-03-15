@@ -84,6 +84,7 @@ class dbmodel:
     # Close the connection
     def close_connection(self):
         self.conn.close()
+        
     def get_portfolio_data(self):
         # Fetch all the stocks
         self.c.execute("SELECT * FROM stocks")
@@ -106,10 +107,3 @@ class dbmodel:
                 'value': bond[1] * bond[2]
             })
         return data
-#apple = Stock("Apple", 150, "APPL")
-#dbmodel().buy_stock(apple,10)
-#dbmodel().sell_stock(apple,37.5)
-#nvidia = Stock("Nvidia",150.0,"NVDA",10)
-#gov = GovernmentBond("US Treasury", 1000.0, 10, 0.02, "2023-01-01", "USA")
-#dbmodel().buy_bond(gov)
-#dbmodel().sell_bond(apple,5)
