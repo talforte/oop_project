@@ -35,6 +35,14 @@ class SecurityList: #רשימה המכילה 10 אג"ח ו10 מניות כללי
             for security in security_type:
                 if security.name.lower() == name:
                     return security
-        return None
+        return False
     def get_all_securities(self): #להחזיר את כל האג"חים ומניות ביחד
         return self.securities["stocks"] + self.securities["bonds"]
+    
+    def find_security(self, name: str):
+        stock_or_bond = self.get_security_by_name(name)
+        while stock_or_bond is False:
+            print(f"No security found with name: {name}")
+            name = input("Please enter a valid security name: ")
+            stock_or_bond = self.get_security_by_name(name)
+        return stock_or_bond
