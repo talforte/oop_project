@@ -16,17 +16,8 @@ class controller:
     def ask_question(self, question):
         return self.ollama.ask_ollama(question)
     
-    def find_security(self, name: str):
-        stock_or_bond = self.sl.get_security_by_name(name)
-        while stock_or_bond is None:
-            print(f"No security found with name: {name}")
-            name = input("Please enter a valid security name: ")
-            stock_or_bond = self.sl.get_security_by_name(name)
-        return stock_or_bond
-    
-    
     def buy_stocks(self,name:str,shares_to_buy:float):
-        stock = self.find_security(name)
+        stock = self.sl.find_security(name)
         risk = self.cr.calculate_risk(stock.sector, stock.changes, stock.type) 
         if self.cr.matching_risk_level(self.risk_level,risk):
             return self.db.buy_stock(stock,shares_to_buy)
@@ -35,11 +26,11 @@ class controller:
             return False
         
     def sell_stocks(self,name:str,shares_to_sell:float):
-        stock = self.find_security(name)
+        stock = self.sl.find_security(name)
         return self.db.sell_stock(stock,shares_to_sell)
     
     def buy_bonds(self,name:str,shares_to_buy:float):
-        bond = self.find_security(name)
+        bond = self.sl.find_security(name)
         risk = self.cr.calculate_risk(bond.sector, bond.changes, bond.type)
         if self.cr.matching_risk_level(self.risk_level,risk):
             return self.db.buy_bond(bond,shares_to_buy)
@@ -49,9 +40,10 @@ class controller:
 
     
     def sell_bonds(self,name:str,shares_to_sell:float):
-        bond = self.find_security(name)
-        return self.db.sell_bond(bond,shares_to_sell)
-    
+        bond = self.sl.find_security(name)
+        self.db.sell_bond(bond,shares_to_sell)
+
+        
     def get_portfolio_data(self):
         return self.db.get_portfolio_data()
     
