@@ -1,5 +1,8 @@
 from controller import controller
-# להוסיף צבעים ולסדר את הקוד
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
 class view:
     def __init__(self):
         self.controller = controller(input("Enter your risk level (low/medium/high): "))
@@ -19,13 +22,11 @@ class view:
     
     def show_menu(self):
         
-        #risk_level = self.ask_risk_level()
-        #print(f"Your risk level is: {risk_level}")
-        # Display the menu
-        choice = self.menu()
-        while choice != "5":  # exit if the user chooses 5
 
-            if choice == "1":  # buy database
+        choice = self.menu()
+        while choice != "5":  # exit the menu if the user types 5
+
+            if choice == "1":  # buy (database)
                 print("\033[1;32mWould you like to buy stocks or bonds?\033[0m")
                 if input("Enter your choice (stocks/bonds): ").strip().lower() == "stocks":
                     self.controller.buy_stocks(input("Enter the stock name: "), float(input("Enter the number of shares to buy: "))
@@ -37,7 +38,7 @@ class view:
                     print("\033[1;31mInvalid choice\033[0m")
 
 
-            elif choice == "2":  # sell database
+            elif choice == "2":  # sell (database)
                 print("\033[1;31mWould you like to sell stocks or bonds?\033[0m")
                 if input("Enter your choice (stocks/bonds): ").strip().lower() == "stocks":
                     self.controller.sell_stocks(input("Enter the stock name: "), float(input("Enter the number of shares to sell: "))
@@ -56,9 +57,25 @@ class view:
                 print("\033[1;36mYou chose to show portfolio\033[0m")
                 user_choice = input("Do you want to see it as a graph or a table? (graph/table): ").strip().lower()
                 if user_choice == "graph":
-                    self.controller.show_portfolio_graph()
+                    data = self.controller.get_portfolio_data()
+                    if not data:
+                        print("No data available to display the graph.")
+                    else:
+                        try:
+                            df = pd.DataFrame(data)
+                            # Combine stocks and bonds into one pie chart
+                            plt.figure(figsize=(10, 5))
+                            df.groupby('name')['value'].sum().plot(kind='pie', autopct='%1.1f%%')
+                            plt.ylabel('')
+                            plt.title('Portfolio Distribution by Asset')
+                            plt.show()
+                        except (TypeError, KeyError) as e:
+                            print(f"Error processing data: {e}")
+
                 elif user_choice == "table":
-                    print(self.controller.show_portfolio_table())
+                    data = self.controller.get_portfolio_data()
+                    df = pd.DataFrame(data)
+                    print(df)
                 else:
                     print("\033[1;31mInvalid choice\033[0m")
 
@@ -67,4 +84,3 @@ class view:
 
             choice = self.menu()
         print("\033[1;35mExiting the menu. Goodbye!\033[0m")
-#view().show_menu()
