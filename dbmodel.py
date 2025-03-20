@@ -42,8 +42,8 @@ class dbmodel:
             self.c.execute("UPDATE bonds SET share=? WHERE name=?", (new_share, bond.name))
         else:
             # Insert the bond if it doesn't exist
-            self.c.execute("INSERT INTO bonds (name, price, share, interest_rate, maturity_date, country, credit_rating) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (bond.name, bond.value, shares_to_buy, bond.interest_rate, bond.maturity_date, bond.country, bond.credit_rating))
+            self.c.execute("INSERT INTO bonds (name, price, share, interest_rate, maturity_date, country) VALUES (?, ?, ?, ?, ?, ?)",
+                    (bond.name, bond.value, shares_to_buy, bond.interest_rate, bond.maturity_date, bond.country))
         self.conn.commit()
     # Function to sell stocks
     def sell_stock(self, stock: Stock, shares_to_sell: float):
@@ -80,6 +80,7 @@ class dbmodel:
             self.conn.commit()
         else:
             print(f"You have {current_share[0]} shares and you want to sell {shares_to_sell} shares. There is not enough shares to sell. Abort.")
+            return False
 
     # Close the connection
     def close_connection(self):
