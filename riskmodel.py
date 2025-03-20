@@ -41,10 +41,20 @@ class riskModel(): # מודל לחישוב רמת סיכון
         risk = A + B + Y
         return risk
     
-    
-    def calc_average_risk(self): #מחשב את הסיכון הממוצע של כל ההשקעות
+
+    def calc_average_risk(self):
         total_risk = 0
         for key in self.db:
             total_risk += self.calculate_risk(self.db[key]['sector'], self.db[key]['changes'], self.db[key]['type'])
         average_risk = total_risk / len(self.db)
         return average_risk
+    
+    def matching_risk_level(self, risk_level:str, risk:float):
+        if risk_level == "low" and 0.1 <= risk <= 2.5:
+            return True 
+        elif risk_level == "medium" and 2.51 <= risk <= 4.5:
+            return True
+        elif risk_level == "high" and risk >= 4.51:
+            return True
+        else:
+            return False
