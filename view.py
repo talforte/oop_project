@@ -38,7 +38,16 @@ class view:
                 else:
                     print("\033[1;31mInvalid choice\033[0m")
 
-
+            elif choice == "2":  # sell (database)
+                print("\033[1;31mWould you like to sell stocks or bonds?\033[0m")
+                sell_choice = input("Enter your choice (stocks/bonds): ").strip().lower()
+                if sell_choice == "stocks":
+                    self.controller.sell_stocks(input("Enter the stock name: "), float(input("Enter the number of shares to sell: ")))
+                elif sell_choice == "bonds":
+                    self.controller.sell_bonds(input("Enter the bond name: "), float(input("Enter the number of shares to sell: ")))
+                else:
+                    print("\033[1;31mInvalid choice\033[0m")
+                
             elif choice == "3":  # advice from ollama
                 print("\033[1;33mYou chose to get advice\033[0m")
                 print(self.controller.ask_question(input("Enter your question: ")))
